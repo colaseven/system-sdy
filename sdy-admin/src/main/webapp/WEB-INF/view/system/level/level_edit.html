@@ -1,0 +1,35 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="levelInfoForm">
+
+            <input type="hidden" id="id" value="${level.id}">
+            <div class="row">
+                <div class="col-sm-6">
+                    <#input id="levelNum" name="级别" value="${level.levelNum}" disabled="disabled"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <#input id="startIntegral" name="开始积分" value="${level.startIntegral}" disabled="disabled"/>
+                </div>
+
+                <div class="col-sm-6">
+                    <#input id="endIntegral" name="结束积分" value="${level.endIntegral}" type="number"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row btn-group-m-t">
+            <div class="col-sm-10">
+                <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="LevelInfoDlg.editSubmit()"/>
+                <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="LevelInfoDlg.close()"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<!--引入CSS-->
+<script src="${ctxPath}/static/modular/system/level/level_info.js"></script>
+@}

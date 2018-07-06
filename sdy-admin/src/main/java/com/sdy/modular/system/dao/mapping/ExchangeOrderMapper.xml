@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.modular.system.dao.ExchangeOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sdy.modular.system.model.ExchangeOrder">
+        <id column="id" property="id" />
+        <result column="number" property="number" />
+        <result column="credits" property="credits" />
+        <result column="exchangeTime" property="exchangeTime" />
+        <result column="exchangeCode" property="exchangeCode" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="district" property="district" />
+        <result column="code" property="code" />
+        <result column="remark" property="remark" />
+        <result column="goodsId" property="goodsId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, number, credits, exchangeTime, exchangeCode, province, city, district, code, remark, goodsId
+    </sql>
+
+    <select id="queryPageData" resultType="map">
+        select o.*, g.goodsTitle,g.logoPic from sys_exchange_order o,sys_goods g where 1 = 1
+        <if test="goodsType != null and goodsType != ''">
+            and o.goodsType = #{goodsType}
+        </if>
+        <if test="number != null and number != ''">
+            and o.number like CONCAT('%',#{number},'%')
+        </if>
+        <if test="exchangeCode != null and exchangeCode != ''">
+            and o.exchangeCode like CONCAT('%',#{exchangeCode},'%')
+        </if>
+        and o.goodsId = g.id
+        <choose>
+            <when test="orderByField != null and orderByField !=''">
+                <choose>
+                    <when test="isAsc == true">
+                        order by ${orderByField} ASC
+                    </when>
+                    <otherwise>
+                        order by ${orderByField} DESC
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                order by o.exchangeTime DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryCountGroupByTime" resultType="map">
+        SELECT
+        date_format( dday ,'%m.%d') AS 'date',
+        count( * ) - 1  AS 'count' FROM (
+        SELECT
+        datelist AS dday
+        FROM
+        calendar
+        WHERE 1 = 1
+        <if test="beginTime != null and beginTime !='' and endTime != null and endTime != ''">
+            and (datelist between #{beginTime} and #{endTime})
+        </if>
+        UNION ALL
+        SELECT
+        exchangeTime
+        FROM
+        sys_exchange_order WHERE 1 = 1
+        <if test="beginTime != null and beginTime !='' and endTime != null and endTime != ''">
+            and (exchangeTime between #{beginTime} + ' 00:00:00' and #{endTime} + ' 23:59:59')
+        </if>
+        ) a
+        GROUP BY
+        date_format(dday,'%Y%m%d')
+    </select>
+
+    <select id="queryOrdersByOpenId" resultType="map">
+        SELECT
+	      GROUP_CONCAT(
+	      CONCAT_WS( ",", o.id, o.credits, o.exchangeTime, g.goodsTitle, g.logoPic )
+        ORDER BY
+	      exchangeYear,
+	      exchangeMonth
+	      ) AS exchangeOrderInfo,
+	      exchangeYear,
+	      exchangeMonth
+        FROM
+	      sys_exchange_order o,
+	      sys_goods g
+        WHERE
+	      openId = #{openId}
+	      AND o.goodsId = g.id
+        GROUP BY
+	      exchangeYear,
+	      exchangeMonth
+        ORDER BY
+	      exchangeYear DESC,
+	      exchangeMonth DESC
+    </select>
+
+</mapper>

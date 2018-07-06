@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="kindExpressInfoForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="expressValue" value="${item.express}">
+            <div class="row">
+                <div class="col-sm-6">
+                    <#input id="expressNumber" name="快递单号" value="${item.expressNumber}"/>
+                </div>
+
+                <div class="col-sm-6">
+                    <#select id="express" name="快递公司">
+                        <option value="中通速递">中通速递</option>
+                        <option value="顺丰快递">顺丰快递</option>
+                        <option value="圆通快递">圆通快递</option>
+                        <option value="申通快递">申通快递</option>
+                        <option value="百世快递">百世快递</option>
+                        <option value="韵达快递">韵达快递</option>
+                        <option value="中国邮政">中国邮政</option>
+                        <option value="天天快递">天天快递</option>
+                        <option value="EMS">EMS</option>
+                        <option value="德邦物流">德邦物流</option>
+                        <option value="其他">其他</option>
+                    </#select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row btn-group-m-t">
+            <div class="col-sm-10">
+                <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ExpressInfoDlg.editSubmit()"/>
+                <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ExpressInfoDlg.close()"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<script src="${ctxPath}/static/modular/system/exchangeOrder/exchangeOrderKind_edit.js"></script>
+@}

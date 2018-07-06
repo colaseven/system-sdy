@@ -1,0 +1,49 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>订单统计</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">完成开始时间
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control layer-date"
+                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD',max: laydate.now(-1)})" id="beginTime"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">完成结束时间
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control layer-date"
+                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD',max: laydate.now(-1)})" id="endTime"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="Exchange_Order_Statistics.searchData()"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <canvas id="canvas" height="500" width="1500"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/js/plugins/chartJs/Chart.min.js"></script>
+<script src="${ctxPath}/static/modular/system/exchangeOrder/exchangeOrder_Statistics.js"></script>
+@}

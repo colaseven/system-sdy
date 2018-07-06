@@ -1,0 +1,66 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal"  id="goodsInfoForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <input type="hidden" id="goodsType" value="${item.goodsType}">
+
+            <input type="hidden" id="bannerPic" value="${item.bannerPic}">
+
+            <input type="hidden" id="goodsExplain" value='${item.goodsExplain}'>
+
+            <input type="hidden" id="goodsStatus" value='${item.goodsStatus}'>
+
+
+            <div class="row">
+                <div class="col-sm-9">
+                    <#input id="goodsTitle" name="商品标题:" underline="true" value ="${item.goodsTitle}"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">详情说明:</label>
+                        <div class="col-sm-9">
+                            <div id="editor" name="editor" class="editorHeight">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="pendingDeliveryPaper" name="待发货文案:" underline="true"/>
+                    <#tab name="商品图片:"/>
+                    <div class="hr-line-dashed"></div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-9">
+                    <#input id="marketValue" name="市面价值:" underline="true" value="${item.marketValue}"/>
+                    <#input id="exchangePrice" name="兑换价格:" underline="true" value="${item.exchangePrice}"/>
+                    <#input id="surplusStock" name="剩余库存:" underline="true" value="${item.surplusStock}"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="GoodsInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="GoodsInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/js/plugins/webuploader/webuploader.css"/>
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/css/plugins/webuploader/demo.css"/>
+<script type="text/javascript" src="${ctxPath}/static/js/plugins/webuploader/webuploader.js"></script>
+<script type="text/javascript" src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+<script src="${ctxPath}/static/modular/system/goods/goods_info.js"></script>
+<style>
+    .webuploader-pick{
+        padding:7.1px 15px;
+        background-color: #1ab394;
+    }
+</style>
+@}
+<!--
+                    <#input id="autoDownTime" name="自动下架时间:" underline="true" type="datetime" value="${item.autoDownTime}"
+                            clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" /> -->

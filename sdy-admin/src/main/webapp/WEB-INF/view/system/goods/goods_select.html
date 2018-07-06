@@ -1,0 +1,29 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <div class="thumbnail" style="padding-top: 10px;">
+                            <img src="/kaptcha/coupon" alt="..." style="width: 110px;height: 110px;">
+                            <div class="caption" style="text-align: center">
+                                <#button name="添加优惠券" icon="fa-plus" clickFun="GoodsSelect.addCoupon()" style="margin:auto"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="thumbnail" style="padding-top: 10px;">
+                            <img src="/kaptcha/kind" alt="..." style="width: 110px;height: 110px;">
+                            <div class="caption" style="text-align: center">
+                                <#button name="添加实物" icon="fa-plus" clickFun="GoodsSelect.addKind()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/goods/goods_select.js"></script>
+@}

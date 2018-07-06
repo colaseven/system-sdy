@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.modular.system.dao.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sdy.modular.system.model.Order">
+        <id column="id" property="id" />
+        <result column="shopName" property="shopName" />
+        <result column="orderNumber" property="orderNumber" />
+        <result column="systemNumber" property="systemNumber" />
+        <result column="orderMark" property="orderMark" />
+        <result column="totalPayment" property="totalPayment" />
+        <result column="discountTotal" property="discountTotal" />
+        <result column="repertoryNumber" property="repertoryNumber" />
+        <result column="repertoryName" property="repertoryName" />
+        <result column="buyerMessage" property="buyerMessage" />
+        <result column="remark" property="remark" />
+        <result column="printRemark" property="printRemark" />
+        <result column="systemOrderStatus" property="systemOrderStatus" />
+        <result column="onlineOrderStatus" property="onlineOrderStatus" />
+        <result column="batchNumber" property="batchNumber" />
+        <result column="detailStatus" property="detailStatus" />
+        <result column="oldOrderNumber" property="oldOrderNumber" />
+        <result column="goodsCode" property="goodsCode" />
+        <result column="goodsName" property="goodsName" />
+        <result column="formName" property="formName" />
+        <result column="onlineGoodsCode" property="onlineGoodsCode" />
+        <result column="onlineGoodsName" property="onlineGoodsName" />
+        <result column="onlineFormName" property="onlineFormName" />
+        <result column="singlePrice" property="singlePrice" />
+        <result column="discountSinglePrice" property="discountSinglePrice" />
+        <result column="countNum" property="countNum" />
+        <result column="unit" property="unit" />
+        <result column="receivableAmount" property="receivableAmount" />
+        <result column="salesAmount" property="salesAmount" />
+        <result column="detailRemark" property="detailRemark" />
+        <result column="invoiceTitle" property="invoiceTitle" />
+        <result column="invoiceContent" property="invoiceContent" />
+        <result column="openingBank" property="openingBank" />
+        <result column="bankAccount" property="bankAccount" />
+        <result column="invoiceTaxNumber" property="invoiceTaxNumber" />
+        <result column="invoiceAddress" property="invoiceAddress" />
+        <result column="invoicePhoneNumber" property="invoicePhoneNumber" />
+        <result column="invoiceEmail" property="invoiceEmail" />
+        <result column="express" property="express" />
+        <result column="expressNumber" property="expressNumber" />
+        <result column="expressCost" property="expressCost" />
+        <result column="weight" property="weight" />
+        <result column="volume" property="volume" />
+        <result column="postage" property="postage" />
+        <result column="serviceCharge" property="serviceCharge" />
+        <result column="account" property="account" />
+        <result column="consignee" property="consignee" />
+        <result column="phoneNumber" property="phoneNumber" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="district" property="district" />
+        <result column="detailAddress" property="detailAddress" />
+        <result column="zipCode" property="zipCode" />
+        <result column="orderTime" property="orderTime" />
+        <result column="paymentTime" property="paymentTime" />
+        <result column="singleTime" property="singleTime" />
+        <result column="deliveryTime" property="deliveryTime" />
+        <result column="finishTime" property="finishTime" />
+        <result column="commission" property="commission" />
+        <result column="creditCardCommission" property="creditCardCommission" />
+        <result column="rebateIntegral" property="rebateIntegral" />
+        <result column="checker" property="checker" />
+        <result column="singlePlayer" property="singlePlayer" />
+        <result column="distributor" property="distributor" />
+        <result column="inspector" property="inspector" />
+        <result column="baler" property="baler" />
+        <result column="weigher" property="weigher" />
+        <result column="shipper" property="shipper" />
+        <result column="salesman" property="salesman" />
+    </resultMap>
+
+    <select id="getOrders" resultType="map">
+        select * from sys_order where 1 = 1
+        <if test="phoneNumber != null and phoneNumber != ''">
+            and phoneNumber like CONCAT('%',#{phoneNumber},'%')
+        </if>
+        <if test="beginTime != null and beginTime !='' and endTime != null and endTime != ''">
+            and (finishTime between #{beginTime} and #{endTime})
+        </if>
+        <choose>
+            <when test="orderByField != null and orderByField !=''">
+                <choose>
+                    <when test="isAsc == true">
+                        order by ${orderByField} ASC
+                    </when>
+                    <otherwise>
+                        order by ${orderByField} DESC
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                order by finishTime DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectOrders" resultType="map">
+        select * from sys_order where 1 = 1
+        <if test="phoneNumber != null and phoneNumber != ''">
+            and phoneNumber like CONCAT('%',#{phoneNumber},'%')
+        </if>
+        <if test="beginTime != null and beginTime !='' and endTime != null and endTime != ''">
+            and (finishTime between #{beginTime} and #{endTime})
+        </if>
+        order by finishTime desc
+    </select>
+
+    <select id="selectUnBindOrders" resultType="order">
+        SELECT * FROM sys_order WHERE 1 = 1
+        <if test="phoneNumber != null and phoneNumber != ''">
+            AND phoneNumber LIKE CONCAT('%',#{phoneNumber},'%') AND bindingPhoneNumber IS  NULL
+        </if>
+    </select>
+
+    <select id="selectBoundAccounts" resultType="java.lang.String">
+        SELECT DISTINCT (o.bindingPhoneNumber)  FROM sys_order o WHERE 1 =1
+        <if test="openId != null and openId != ''">
+            AND openId = #{openId}
+        </if>
+    </select>
+
+    <select id="selectCreditsByOpenId" resultType="java.lang.String">
+        SELECT SUM(credits) from sys_order WHERE 1 = 1
+        <if test="openId != null and openId != ''">
+            AND openId = #{openId}
+        </if>;
+    </select>
+
+    <select id="selectOrderByBindAccount" resultType="order">
+        SELECT * FROM  sys_order WHERE  1 = 1
+        <if test="number != null and number != ''">
+            AND bindingPhoneNumber = #{number}
+        </if>
+        LIMIT 1
+    </select>
+
+    <select id="getCountByOpenId" resultType="int">
+        SELECT COUNT(DISTINCT bindingPhoneNumber) FROM sys_order WHERE openId = #{openId}
+    </select>
+
+    <select id="selectGroupOrder" resultType="map">
+        SELECT GROUP_CONCAT(CONCAT_WS(",",id,orderNumber,finishTime,salesAmount,shopName) ORDER BY finishYear,finishMonth) AS orderInfo,finishYear,finishMonth  FROM sys_order WHERE openId = #{openId} GROUP BY finishYear,finishMonth
+        ORDER BY finishYear DESC,finishMonth DESC
+    </select>
+
+    <select id="getDetail" resultType="map">
+        SELECT orderNumber AS orderNum,consignee,bindingPhoneNumber AS contactWay,CONCAT_WS(" ",province,city,city,detailAddress) as address FROM sys_order WHERE id = #{orderId}
+    </select>
+
+    <select id="selectOrderByOpenId" resultType="order">
+        SELECT * FROM sys_order WHERE 1 = 1
+        <if test="openId != null and openId != ''">
+            AND openId = #{openId}
+        </if>
+        ORDER BY credits ASC
+    </select>
+
+    <insert id="saveAllOrders" useGeneratedKeys="true" parameterType="java.util.List">
+        INSERT INTO sys_order
+        VALUES
+        <foreach item="order" collection="list"  separator="," >
+            (
+            #{order.id},
+            #{order.shopName},
+            #{order.orderNumber},
+            #{order.systemNumber},
+            #{order.orderMark},
+            #{order.totalPayment},
+            #{order.discountTotal},
+            #{order.repertoryNumber},
+            #{order.repertoryName},
+            #{order.buyerMessage},
+            #{order.remark},
+            #{order.printRemark},
+            #{order.systemOrderStatus},
+            #{order.onlineOrderStatus},
+            #{order.batchNumber},
+            #{order.detailStatus},
+            #{order.oldOrderNumber},
+            #{order.goodsCode},
+            #{order.goodsName},
+            #{order.formName},
+            #{order.onlineGoodsCode},
+            #{order.onlineGoodsName},
+            #{order.onlineFormName},
+            #{order.singlePrice},
+            #{order.discountSinglePrice},
+            #{order.countNum},
+            #{order.unit},
+            #{order.receivableAmount},
+            #{order.salesAmount},
+            #{order.detailRemark},
+            #{order.invoiceTitle},
+            #{order.invoiceContent},
+            #{order.openingBank},
+            #{order.bankAccount},
+            #{order.invoiceTaxNumber},
+            #{order.invoiceAddress},
+            #{order.invoicePhoneNumber},
+            #{order.invoiceEmail},
+            #{order.express},
+            #{order.expressNumber},
+            #{order.expressCost},
+            #{order.weight},
+            #{order.volume},
+            #{order.postage},
+            #{order.serviceCharge},
+            #{order.account},
+            #{order.consignee},
+            #{order.phoneNumber},
+            #{order.province},
+            #{order.city},
+            #{order.district},
+            #{order.detailAddress},
+            #{order.zipCode},
+            #{order.orderTime},
+            #{order.paymentTime},
+            #{order.singleTime},
+            #{order.deliveryTime},
+            #{order.finishTime},
+            #{order.commission},
+            #{order.creditCardCommission},
+            #{order.rebateIntegral},
+            #{order.checker},
+            #{order.singlePlayer},
+            #{order.distributor},
+            #{order.inspector},
+            #{order.baler},
+            #{order.weigher},
+            #{order.shipper},
+            #{order.salesman},
+            #{order.bindingPhoneNumber},
+            #{order.openId},
+            #{order.credits},
+            #{order.finishYear},
+            #{order.finishMonth}
+            )
+        </foreach>
+    </insert>
+
+</mapper>
